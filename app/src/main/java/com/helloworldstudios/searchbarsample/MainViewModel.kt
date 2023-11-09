@@ -23,7 +23,11 @@ class MainViewModel : ViewModel() {
     private val _isSearching = MutableStateFlow(false)
     val isSearching = _isSearching.asStateFlow()
 
-    private val _contacts = MutableStateFlow(allContacts)
+    private val _contacts = MutableStateFlow(allContacts.flatMap {con ->
+        List(1000){
+            Contact(con.firstName, con.middleName, con.lastName, con.phoneNumber)
+        }
+    }.shuffled())
 
     val contacts = searchText
         .debounce(1000L)
